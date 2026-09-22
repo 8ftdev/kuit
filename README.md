@@ -149,3 +149,4 @@ git push origin v0.1.0
 ```
 
 Pushing the tag starts the release workflow. `dist/` is ignored by Git.
+Tags with a prerelease suffix, such as `v0.1.0-rc.1`, are published as GitHub prereleases.

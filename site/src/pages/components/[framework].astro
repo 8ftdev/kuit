@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ComponentIndex from '../../components/ComponentIndex.astro';
+import { components, frameworkNames } from '../../lib/catalog';
+
+export function getStaticPaths() {
+ return Object.keys(frameworkNames).map(framework => ({ params: { framework } }));
+}
+const framework = Astro.params.framework!;
+const label = frameworkNames[framework];
+const entries = components.filter(component => component.framework === framework);
+---
+<Layout pageTitle={`${label} components`}>
+ <div class="mb-7 flex items-center justify-between gap-3"><h1 class="text-3xl font-semibold tracking-tight">{label}</h1><span class="text-sm text-muted-foreground">{entries.length} {entries.length === 1 ? 'component' : 'components'}</span></div>
+ {entries.length ? <section class="mt-9 scroll-mt-24"><ComponentIndex entries={entries} /></section> : <p class="py-10 text-muted-foreground">No {label} components yet.</p>}
+</Layout>

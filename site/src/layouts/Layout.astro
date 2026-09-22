@@ -1,0 +1,47 @@
+---
+import "../styles/global.css";
+import Navbar from "../components/react/Navbar";
+import { BreadcrumbIcon } from "../components/ruixen/breadcrumb-icon";
+import { components, frameworkNames, title } from "../lib/catalog";
+
+const { pageTitle = "Kuit" } = Astro.props;
+const [section, framework, component] = Astro.url.pathname
+	.split("/")
+	.filter(Boolean);
+const breadcrumbs = [
+	{ label: "", href: "/" },
+	...(section === "components"
+		? [{ label: "Components", href: "/components/" }]
+		: []),
+	...(section === "components" && frameworkNames[framework]
+		? [{ label: frameworkNames[framework], href: `/components/${framework}/` }]
+		: []),
+	...(section === "components" && component
+		? [{ label: title(component) }]
+		: []),
+	...(section === "tools" ? [{ label: "Web Tools" }] : []),
+	...(section === "snippets" ? [{ label: "Snippets" }] : []),
+];
+const sections = [
+	{
+		items: [
+			{
+				label: "Components",
+				href: "/components/",
+				meta: `(${components.length})`,
+			},
+			{ label: "Snippets", href: "/snippets/" },
+			{ label: "Web Tools", href: "/tools/" },
+		],
+	},
+];
+---
+<!doctype html>
+<html lang="en" class="dark min-h-dvh font-sans scheme-dark">
+ <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="color-scheme" content="dark"/><title>{pageTitle} · Kuit</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"/></head>
+ <body class="min-h-dvh">
+  <a href="#main" class="fixed top-0 left-5 z-100 -translate-y-full rounded-md bg-foreground p-3 text-background focus:translate-y-5">Skip to content</a>
+  <header class="h-24 sm:h-32"><Navbar sections={sections} client:load /></header>
+  <main id="main" class="mx-auto w-full max-w-5xl px-4 pt-6 pb-20 sm:px-8 sm:pt-8">{section && <BreadcrumbIcon items={breadcrumbs} className="-ml-2 mb-4" client:load />}<slot /></main>
+ </body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "name": "kuit-viewer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --bun run astro dev --host 127.0.0.1",
+    "build": "bun --bun run astro build",
+    "preview": "bun --bun run astro preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.3.0",
+    "@astrojs/solid-js": "^5.1.0",
+    "@astrojs/svelte": "^7.1.0",
+    "@astrojs/vue": "^5.1.0",
+    "@lineiconshq/free-icons": "^1.0.7",
+    "@lineiconshq/react-lineicons": "^1.0.5",
+    "@tailwindcss/vite": "^4.1.0",
+    "@vue/compiler-sfc": "^3.5.22",
+    "astro": "^5.13.0",
+    "clsx": "^2.1.1",
+    "fumadocs-core": "^16.15.13",
+    "fumadocs-ui": "^16.15.13",
+    "hast-util-to-jsx-runtime": "^2.3.6",
+    "lucide-react": "latest",
+    "motion": "^12.23.0",
+    "postcss": "^8.5.6",
+    "postcss-value-parser": "^4.2.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "shiki": "^4.4.3",
+    "solid-js": "^1.9.9",
+    "svelte": "^5.39.0",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.1",
+    "vue": "^3.5.22"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0"
+  }
+}

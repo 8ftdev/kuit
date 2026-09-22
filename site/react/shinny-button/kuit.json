@@ -1,0 +1,30 @@
+{
+  "name": "shinny-button",
+  "framework": "react",
+  "entry": "shinny-button.tsx",
+  "export": "default",
+  "files": [
+    "shinny-button.tsx",
+    "spark.svg",
+    "button.css"
+  ],
+  "dependencies": {
+    "react": "^19.1.0"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "description": "Text shown before the first click.",
+      "default": "'Make it shine'"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "description": "Prevent interaction.",
+      "default": "false"
+    }
+  ]
+}

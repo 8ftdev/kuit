@@ -1,0 +1,27 @@
+{
+  "name": "shinny-button",
+  "framework": "solid",
+  "entry": "shinny-button.tsx",
+  "export": "default",
+  "files": [
+    "shinny-button.tsx",
+    "spark.svg",
+    "button.css"
+  ],
+  "dependencies": {
+    "solid-js": "^1.9.9"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "description": "Button text."
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false
+    }
+  ]
+}

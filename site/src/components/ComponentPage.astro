@@ -1,0 +1,19 @@
+---
+import Layout from "../layouts/Layout.astro";
+import {
+	type ComponentMeta,
+	loadFiles,
+	title,
+} from "../lib/catalog";
+import ComponentTabs from "./react/ComponentTabs";
+
+interface Props {
+	meta: ComponentMeta;
+}
+const { meta } = Astro.props;
+const files = await loadFiles(meta);
+---
+<Layout pageTitle={title(meta.name)}>
+ <div class="mb-7 flex items-center justify-between gap-3"><h1 class="text-3xl font-semibold tracking-tight">{title(meta.name)}</h1></div>
+ <ComponentTabs meta={meta} files={files} pathname={Astro.url.pathname} client:load />
+</Layout>

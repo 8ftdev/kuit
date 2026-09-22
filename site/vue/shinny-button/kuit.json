@@ -1,0 +1,29 @@
+{
+  "name": "shinny-button",
+  "framework": "vue",
+  "entry": "shinny-button.vue",
+  "export": "default",
+  "files": [
+    "shinny-button.vue",
+    "spark.svg",
+    "button.css"
+  ],
+  "dependencies": {
+    "vue": "^3.5.22"
+  },
+  "props": [
+    {
+      "name": "label",
+      "type": "string",
+      "required": false,
+      "description": "Button text.",
+      "default": "'Make it shine'"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "required": false,
+      "default": "false"
+    }
+  ]
+}

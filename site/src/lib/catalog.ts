@@ -1,7 +1,7 @@
 import { codeToTokens, type BundledLanguage } from 'shiki';
 
 export interface ComponentMeta {
- name:string; framework:string; entry:string; export:string; files:string[];
+ schemaVersion?:1; name:string; framework:string; entry:string; export:string; files:string[];
  dependencies:Record<string,string>;
  props:{name:string;type:string;required:boolean;default?:string;description?:string}[];
 }

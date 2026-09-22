@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 1,
   "name": "shinny-button",
   "framework": "solid",
   "entry": "shinny-button.tsx",

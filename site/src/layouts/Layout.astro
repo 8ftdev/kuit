@@ -41,7 +41,7 @@ const sections = [
  <head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="color-scheme" content="dark"/><title>{pageTitle} · Kuit</title><link rel="icon" type="image/svg+xml" href="/favicon.svg"/></head>
  <body class="min-h-dvh">
   <a href="#main" class="fixed top-0 left-5 z-100 -translate-y-full rounded-md bg-foreground p-3 text-background focus:translate-y-5">Skip to content</a>
-  <header class="h-24 sm:h-32"><Navbar sections={sections} client:load /></header>
-  <main id="main" class="mx-auto w-full max-w-5xl px-4 pt-6 pb-20 sm:px-8 sm:pt-8">{section && <BreadcrumbIcon items={breadcrumbs} className="-ml-2 mb-4" client:load />}<slot /></main>
+  <header class={section ? "h-24 sm:h-32" : "h-0"}><Navbar sections={sections} client:load /></header>
+  <main id="main" class={section ? "mx-auto w-full max-w-5xl px-4 pt-6 pb-20 sm:px-8 sm:pt-8" : "mx-auto flex min-h-dvh w-full max-w-5xl items-center justify-center px-4 sm:px-8"}>{section && <BreadcrumbIcon items={breadcrumbs} className="-ml-2 mb-4" client:load />}<slot /></main>
  </body>
 </html>

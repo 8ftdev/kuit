@@ -1,15 +1,15 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { ComboKbd } from '../components/react/Kbd';
+import { ComboKbd } from "../components/react/Kbd";
+import Layout from "../layouts/Layout.astro";
 
 const destinations = [
- {label:'Components',href:'/components/',key:'A'},
- {label:'Snippets',href:'/snippets/',key:'S',status:'Soon'},
- {label:'Web Tools',href:'/tools/',key:'D',status:'Soon'},
+	{ label: "Components", href: "/components/", key: "A" },
+	{ label: "Snippets", href: "/snippets/", key: "S", status: "Soon" },
+	{ label: "Web Tools", href: "/tools/", key: "D", status: "Soon" },
 ];
 ---
 <Layout pageTitle="Home">
- <nav class="mx-auto mt-24 grid w-full max-w-70 gap-1 sm:mt-40" aria-label="Kuit sections">
+ <nav class="mx-auto grid w-full max-w-70 gap-1" aria-label="Kuit sections">
   {destinations.map(item => <a href={item.href} class="flex items-center justify-between gap-6 rounded-md px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-card hover:text-foreground focus-visible:bg-card focus-visible:text-foreground"><span>{item.label}</span><span class="ml-auto flex items-center gap-3">{item.status && <span class="text-xs text-muted-foreground">{item.status}</span>}<ComboKbd keys={[item.key]} size="sm" /></span></a>)}
  </nav>
 </Layout>

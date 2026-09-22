@@ -24,7 +24,7 @@ test('copies nested imports and CSS assets, preserving npm imports and cycles', 
  const p=await run(root,'src/button.tsx'); const err=await new Response(p.stderr).text(); expect(await p.exited,err).toBe(0);
  const code=await readFile(join(root,'react/button/button.tsx'),'utf8'); expect(code).toContain('"./icon.svg"'); expect(code).toContain('"react"');
  expect(await readFile(join(root,'react/button/style.css'),'utf8')).toContain('./icon.svg');
- const meta=JSON.parse(await readFile(join(root,'react/button/kuit.json'),'utf8')); expect(meta.dependencies.react).toBe('^19.1.0'); expect(meta.files).toContain('value.ts');
+ const meta=JSON.parse(await readFile(join(root,'react/button/kuit.json'),'utf8')); expect(meta.schemaVersion).toBe(1); expect(meta.dependencies.react).toBe('^19.1.0'); expect(meta.files).toContain('value.ts');
  const page=await readFile(join(root,'src/pages/components/react/button/index.astro'),'utf8');
  const preview=await readFile(join(root,'src/pages/components/react/button/preview.astro'),'utf8');
  expect(page).toContain('components/ComponentPage.astro');

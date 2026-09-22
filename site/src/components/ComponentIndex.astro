@@ -1,10 +1,13 @@
 ---
-import { title, type ComponentMeta } from '../lib/catalog';
-interface Props { entries: ComponentMeta[] }
+import { type ComponentMeta, title } from "../lib/catalog";
+
+interface Props {
+	entries: ComponentMeta[];
+}
 const { entries } = Astro.props;
 ---
 {entries.map(component => (
- <a href={`/components/${component.framework}/${component.name}/`} class="flex items-center gap-6 border-t border-border py-5 text-sm hover:bg-card hover:text-foreground">
+ <a href={`/components/${component.framework}/${component.name}/`} class="flex items-center gap-6 border-t border-border py-5 px-2 text-sm hover:bg-card hover:text-foreground rounded-sm">
   <span>{title(component.name)}</span>
   <code class="ml-auto hidden font-mono text-xs text-muted-foreground sm:inline">{component.entry}</code>
   <svg class="size-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>

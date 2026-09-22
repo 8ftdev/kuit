@@ -72,6 +72,8 @@ For `kuit ./button.tsx react shinny-button`, the destination contains:
 
 The page is available at `/components/react/shinny-button/`, with the framework index at `/components/react/`. Source imports such as `../../../assets/icon.svg` become `./icon.svg`. Dependencies are copied, never moved out of the source project. Conflicting basenames receive stable suffixes.
 
+Each bundle's `kuit.json` is a versioned component manifest (`schemaVersion: 1`). It records the framework, entry/export, bundled filenames, package versions, and documented props. The importer validates it against the staged files before publishing the component. The JSON Schema is included in the viewer at `/schema/kuit-component.schema.json` for editors and future tooling. Existing manifests without `schemaVersion` continue to display; new imports use version 1. This manifest describes a local Kuit bundle, not a shadcn registry item or a remotely installable package.
+
 ### Options
 
 | Flag | Purpose |

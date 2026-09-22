@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "/schema/kuit-component.schema.json",
+  "title": "Kuit component manifest",
+  "type": "object",
+  "required": ["schemaVersion", "name", "framework", "entry", "export", "files", "dependencies", "props"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "name": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "framework": { "enum": ["react", "vue", "svelte", "solid"] },
+    "entry": { "$ref": "#/$defs/filename" },
+    "export": { "type": "string", "pattern": "^(?:default|[A-Za-z_$][A-Za-z0-9_$]*)$" },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/filename" }
+    },
+    "dependencies": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    },
+    "props": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "required"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "type": { "type": "string", "minLength": 1 },
+          "required": { "type": "boolean" },
+          "default": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "filename": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9_.-]+$",
+      "not": { "enum": [".", ".."] }
+    }
+  }
+}

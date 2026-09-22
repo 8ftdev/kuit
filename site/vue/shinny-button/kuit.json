@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 1,
   "name": "shinny-button",
   "framework": "vue",
   "entry": "shinny-button.vue",

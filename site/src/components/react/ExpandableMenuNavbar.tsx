@@ -137,7 +137,7 @@ export default function ExpandableMenuNavbar({
           animate={{ height: open ? openHeight : COLLAPSED_HEIGHT }}
           transition={SPRING}
           className={[
-            "pointer-events-auto flex w-full max-w-md flex-col overflow-hidden",
+            "pointer-events-auto flex w-full max-w-70 flex-col overflow-hidden",
             "rounded-2xl border border-border bg-card/85 backdrop-blur-md",
             "shadow-lg shadow-black/40",
           ].join(" ")}

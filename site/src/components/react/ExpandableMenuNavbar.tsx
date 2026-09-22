@@ -19,40 +19,11 @@ interface NavSection {
 interface ExpandableMenuNavbarProps {
   brand?: React.ReactNode;
   brandLabel?: string;
-  sections?: NavSection[];
+  sections: NavSection[];
   status?: string;
   version?: string;
   shortcut?: string;
 }
-
-const DEFAULT_SECTIONS: NavSection[] = [
-  {
-    items: [
-      { label: "Index", meta: "01" },
-      { label: "Work", meta: "24" },
-      { label: "Notes", meta: "12" },
-      { label: "Lab", meta: "08" },
-    ],
-  },
-  {
-    title: "Resources",
-    items: [
-      { label: "Changelog", meta: "v2.4" },
-      { label: "Library", meta: "126" },
-      { label: "Tools", meta: "07" },
-      { label: "Press kit", meta: "↗", external: true },
-    ],
-  },
-  {
-    title: "Connect",
-    items: [
-      { label: "Contact" },
-      { label: "Newsletter", meta: "monthly" },
-      { label: "Twitter", meta: "↗", external: true },
-      { label: "GitHub", meta: "↗", external: true },
-    ],
-  },
-];
 
 function StackedMark() {
   return (
@@ -85,10 +56,10 @@ const WRAPPER_PADDING = 32;
 
 export default function ExpandableMenuNavbar({
   brand,
-  brandLabel = "Index",
-  sections = DEFAULT_SECTIONS,
-  status = "Available",
-  version = "v2.4.1",
+  brandLabel = "kuit",
+  sections,
+  status = "Local library",
+  version = "v0.1",
   shortcut = "M",
 }: ExpandableMenuNavbarProps) {
   const [open, setOpen] = React.useState(false);

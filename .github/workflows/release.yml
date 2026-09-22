@@ -1,0 +1,49 @@
+name: Release CLI
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      - name: Test CLI
+        run: go test ./...
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install helper dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Test importer and viewer states
+        run: bun test tests/import.test.ts tests/viewer-assets.test.ts tests/empty-state.test.ts
+
+      - name: Verify standalone viewer
+        run: |
+          go build -o "$RUNNER_TEMP/kuit" .
+          KUIT_CONFIG="$RUNNER_TEMP/kuit-config.json" "$RUNNER_TEMP/kuit" init "$RUNNER_TEMP/kuit-viewer"
+          bun run --cwd "$RUNNER_TEMP/kuit-viewer" build
+
+      - name: Release CLI
+        uses: goreleaser/goreleaser-action@v7
+        with:
+          version: '~> v2'
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

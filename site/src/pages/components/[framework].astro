@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ComponentIndex from '../../components/ComponentIndex.astro';
+import EmptyState from '../../components/EmptyState.astro';
 import { components, frameworkNames } from '../../lib/catalog';
 
 export function getStaticPaths() {
@@ -9,8 +10,10 @@ export function getStaticPaths() {
 const framework = Astro.params.framework!;
 const label = frameworkNames[framework];
 const entries = components.filter(component => component.framework === framework);
+const extensions: Record<string, string> = { react: 'tsx', vue: 'vue', svelte: 'svelte', solid: 'tsx' };
+const command = `kuit ./src/button.${extensions[framework]} ${framework} --install`;
 ---
 <Layout pageTitle={`${label} components`}>
  <div class="mb-7 flex items-center justify-between gap-3"><h1 class="text-3xl font-semibold tracking-tight">{label}</h1><span class="text-sm text-muted-foreground">{entries.length} {entries.length === 1 ? 'component' : 'components'}</span></div>
- {entries.length ? <section class="mt-9 scroll-mt-24"><ComponentIndex entries={entries} /></section> : <p class="py-10 text-muted-foreground">No {label} components yet.</p>}
+ {entries.length ? <section class="mt-9 scroll-mt-24"><ComponentIndex entries={entries} /></section> : <EmptyState title={`No ${label} components yet`} description={`Run this from a ${label} project to add your first component.`} command={command} />}
 </Layout>

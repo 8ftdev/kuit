@@ -142,6 +142,8 @@ func saveTarget(target string) error {
 
 const usage = `kuit — collect components into your local library
 
+  kuit init [viewer-path]          Create the local viewer (default: ~/kuit)
+  kuit run                         Start the local viewer
   kuit config set target <viewer-path>
   kuit config show
   kuit <origin> <react|vue|svelte|solid> [name] [flags]
@@ -153,13 +155,19 @@ Flags:
   --install         Run bun install in the destination after importing
   --force           Replace an existing generated bundle and preview
 
-Requires Bun and an initialized Kuit viewer. See README.md for setup.
+Requires Bun. Run kuit init once before importing components.
 `
 
 func run(args []string) error {
 	if len(args) == 0 || args[0] == "--help" || args[0] == "help" {
 		fmt.Print(usage)
 		return nil
+	}
+	if args[0] == "init" {
+		return initViewer(args[1:])
+	}
+	if args[0] == "run" {
+		return runViewer(args[1:])
 	}
 	if args[0] == "config" {
 		if len(args) == 4 && args[1] == "set" && args[2] == "target" {
@@ -191,7 +199,7 @@ func run(args []string) error {
 		o.Target = c.Target
 	}
 	if o.Target == "" {
-		return errors.New("set a destination first: kuit config set target /path/to/kuit/site")
+		return errors.New("no viewer configured; run kuit init first")
 	}
 	o.Target, err = filepath.Abs(o.Target)
 	if err != nil {

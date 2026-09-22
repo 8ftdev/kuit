@@ -1,9 +1,11 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import EmptyState from '../../components/EmptyState.astro';
 import {components,frameworkNames} from '../../lib/catalog';
 ---
 <Layout pageTitle="Components">
  <div class="mb-7 flex items-center justify-between gap-3"><h1 class="text-3xl font-semibold tracking-tight">Components</h1><span class="text-sm text-muted-foreground">{components.length} in your library</span></div>
+ {components.length === 0 && <EmptyState title="No components yet" description="Run this from a project to add your first component to Kuit." command="kuit ./src/button.tsx react --install" />}
  <section class="mt-9 scroll-mt-24">
   {Object.entries(frameworkNames).map(([framework,label]) => <a href={`/components/${framework}/`} class="flex items-center gap-6 border-t border-border py-5 text-sm hover:bg-card hover:text-foreground"><span>{label}</span><code class="ml-auto font-mono text-xs text-muted-foreground">({components.filter(c=>c.framework===framework).length})</code><svg class="size-4" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m6 3 5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg></a>)}
  </section>

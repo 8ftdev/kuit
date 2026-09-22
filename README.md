@@ -4,20 +4,26 @@ A small Go CLI that collects a UI component and its local dependencies into an A
 
 ## Start
 
-Requires Go 1.23+ and Bun 1.2+.
+Requires Bun 1.2+. Download a `kuit` binary for macOS, Linux or Windows from
+the [GitHub Releases page](https://github.com/8ftdev/kuit/releases) and place it
+on your PATH. To build the CLI from this repository instead, Go 1.23+ is also
+required: run `bun run build:cli` and use `./bin/kuit` below.
 
 ```sh
-bun install
-bun run build:cli
-
-# Save this viewer as the destination (use its absolute path).
-./bin/kuit config set target "$PWD/site"
-
-# Four small working examples are included.
-bun run dev
+kuit init       # Create ~/kuit and install its Bun dependencies
+kuit run        # Start the local Astro viewer
 ```
 
-Open <http://localhost:4321>. The home page links to Components, Snippets and Web Tools. Press **A**, **S** or **D** to open those sections; **M** opens the menu. Snippets and Web Tools are placeholders for now. The component viewer uses Astro, Fumadocs, the Ruixen expandable navbar and magnetic tabs, and Lineicons. There is no sidebar or table of contents.
+Open the local URL printed by Astro. `kuit init` embeds the same viewer UI as
+this repository, starts with an empty component library, saves its path for future imports,
+and refuses to replace an existing directory. Choose another location with
+`kuit init /path/to/viewer`. Run `kuit run` from any directory; it uses the saved
+viewer path. `KUIT_TARGET` can override it for one command.
+
+The home page links to Components, Snippets and Web Tools. Press **A**, **S**
+or **D** to open those sections; **M** opens the menu. Snippets and Web Tools
+are placeholders for now. The viewer uses Astro, Fumadocs, the Ruixen expandable
+navbar and magnetic tabs, and Lineicons. There is no sidebar or table of contents.
 
 To put `kuit` on your PATH:
 
@@ -25,6 +31,16 @@ To put `kuit` on your PATH:
 go install .
 # If needed, add "$(go env GOPATH)/bin" to PATH in your shell configuration.
 ```
+
+Prebuilt CLI archives will appear after the first version tag is pushed. Each
+archive contains the binary (`kuit.exe` on Windows) and this README. The viewer
+template is embedded in the binary, while Bun downloads its dependencies during
+`kuit init`.
+
+The repository's `site/` includes four sample components for development. New
+viewers created by `kuit init` leave those samples out and show an import command
+on empty component pages. Snippets and Web Tools remain clearly labeled
+placeholders.
 
 ## Import from any project
 
@@ -42,7 +58,7 @@ kuit ./src/Button.tsx solid --export Button
 For `kuit ./button.tsx react shinny-button`, the destination contains:
 
 ```text
-site/
+~/kuit/
   react/shinny-button/
     shinny-button.tsx
     icon.svg
@@ -88,15 +104,46 @@ The Props table is best-effort static documentation, not interactive controls or
 - This is source collection, not arbitrary application migration. Only reachable dependencies are collected; unreferenced public files, runtime-created paths, HTML `srcset`, and asset strings assembled in code are not discovered.
 - The source Vite config is executed during resolution. Use source projects you trust.
 
-To use a different local library, copy the `site/` template, run `bun install` inside it, and configure that path as the target. All helper dependencies are declared in the template; the Go binary embeds the helper and does not depend on this checkout. Restart the viewer after adding routes if an existing dev session has not picked them up.
+To use an existing local viewer, run `kuit config set target /path/to/viewer`.
+All dependencies are declared in the viewer's `package.json`, and its own
+`bun.lock` keeps installs independent of this repository. The Go binary embeds
+the helper and viewer template; it does not depend on this checkout. Restart
+the viewer after adding routes if an existing dev session has not picked them up.
 
 ## Development
 
 ```sh
+bun install
 go test ./...
 bun test
 bun run build
 bun run examples  # regenerates the four shipped demos; overwrites their generated files
 ```
 
+`bun run dev` starts the repository's working viewer in `site/` for development.
+
 See `docs/superpowers/specs/2026-09-22-kuit-design.md` for the approved scope.
+
+## CLI releases
+
+GoReleaser builds CLI archives and checksums when a `v*` tag is pushed to
+GitHub. The release workflow runs Go, Bun importer, and empty-viewer tests, initializes and
+builds a standalone viewer, then uses the repository's `GITHUB_TOKEN` to
+publish the GitHub Release; no separate token is needed. The helper TypeScript
+files and viewer template are embedded in each binary at build time.
+
+Check a release locally without publishing:
+
+```sh
+goreleaser check
+goreleaser release --snapshot --clean
+```
+
+When the release is ready, create and push a semantic-version tag, for example:
+
+```sh
+git tag -a v0.1.0 -m "v0.1.0"
+git push origin v0.1.0
+```
+
+Pushing the tag starts the release workflow. `dist/` is ignored by Git.

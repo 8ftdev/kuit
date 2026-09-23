@@ -4,8 +4,15 @@ A small Go CLI that collects a UI component and its local dependencies into an A
 
 ## Start
 
-Requires Bun 1.2+. Download a `kuit` binary for macOS, Linux or Windows from
-the [GitHub Releases page](https://github.com/8ftdev/kuit/releases) and place it
+Requires Bun 1.2+. On macOS or Linux, install the CLI from the
+[Homebrew tap](https://github.com/8ftdev/homebrew-tap):
+
+```sh
+brew install 8ftdev/tap/kuit
+```
+
+Alternatively, download a binary for macOS, Linux or Windows from the
+[GitHub Releases page](https://github.com/8ftdev/kuit/releases) and place it
 on your PATH. To build the CLI from this repository instead, Go 1.23+ is also
 required: run `bun run build:cli` and use `./bin/kuit` below.
 
@@ -32,8 +39,7 @@ go install .
 # If needed, add "$(go env GOPATH)/bin" to PATH in your shell configuration.
 ```
 
-Prebuilt CLI archives will appear after the first version tag is pushed. Each
-archive contains the binary (`kuit.exe` on Windows) and this README. The viewer
+Each release archive contains the binary (`kuit.exe` on Windows) and this README. The viewer
 template is embedded in the binary, while Bun downloads its dependencies during
 `kuit init`.
 

@@ -86,7 +86,7 @@ Each bundle's `kuit.json` is a versioned component manifest (`schemaVersion: 1`)
 | --- | --- |
 | `--target /path/to/site` | Override the saved destination. `KUIT_TARGET` is also supported. |
 | `--export Button` | Select a named export; otherwise choose default or the only capitalized export. |
-| `--props '{"label":"Hello"}'` | Set serializable initial preview props. |
+| `--props '{"label":"Hello"}'` | Set serializable preview props, overriding inferred values. |
 | `--install` | Run `bun install` in the viewer after a successful import. |
 | `--force` | Replace an existing generated bundle, metadata and preview wrapper. |
 
@@ -98,7 +98,7 @@ An existing bundle is protected unless `--force` is supplied. Only folders ident
 
 The page has **Preview**, **Code**, and **Props** tabs. Code includes all collected source files, syntax highlighting, line numbers and copy; its panel matches the Preview height (540px on desktop, 440px on mobile), with full-size text and scrolling. Binary assets remain in the bundle. Each preview runs in its own iframe to isolate component CSS from the viewer.
 
-Edit `preview-props.json` for JSON props. For providers, callbacks, slots or other setup, edit the generated `preview.astro` and/or add a framework demo wrapper. A component requiring a router or application context cannot be mounted correctly without that setup. Required props are reported by the importer.
+For required string-literal union props, the importer uses the first value as the preview default. For example, `type Variant = 'network' | 'control'` produces `{ "variant": "network" }` in `preview-props.json`; pass `--props '{"variant":"control"}'` to choose another value. If a required prop has no inferable value, the import stops before copying and prints a command showing how to provide it. Edit `preview-props.json` after import to change JSON props. For providers, callbacks, slots or other setup, edit the generated `preview.astro` and/or add a framework demo wrapper. A component requiring a router or application context cannot be mounted correctly without that setup.
 
 The Props table is best-effort static documentation, not interactive controls or a complete type checker. Local TypeScript interfaces/type literals, typed React/Solid function parameters, Vue `defineProps<T>()`, Svelte `$props()` and legacy `export let` are recognized. Complex inherited, computed or framework-specific runtime prop declarations may require manually editing the `props` array in `kuit.json`.
 

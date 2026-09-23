@@ -31,8 +31,8 @@ jobs:
       - name: Install helper dependencies
         run: bun install --frozen-lockfile
 
-      - name: Test importer and viewer states
-        run: bun test tests/import.test.ts tests/viewer-assets.test.ts tests/empty-state.test.ts
+      - name: Test importer, viewer, and Homebrew generator
+        run: bun test
 
       - name: Verify standalone viewer
         run: |

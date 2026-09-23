@@ -141,3 +141,30 @@ export function documentProps(scripts:any[],ts:any,exportName='default'):Prop[] 
  for(const [name,value] of defaults)if(result.has(name)){result.get(name)!.default=value;result.get(name)!.required=false;}
  return [...result.values()];
 }
+
+export function inferPreviewProps(scripts:any[],ts:any,props:Prop[]):Record<string,string> {
+ const aliases=new Map<string,any>();
+ for(const sf of scripts)for(const statement of sf.statements)
+  if(ts.isTypeAliasDeclaration(statement))aliases.set(statement.name.text,statement.type);
+ function literal(node:any,seen=new Set<string>()):string|undefined {
+  if(ts.isParenthesizedTypeNode(node))return literal(node.type,seen);
+  if(ts.isTypeReferenceNode(node)) {
+   const name=node.typeName.getText();if(seen.has(name)||!aliases.has(name))return;
+   seen.add(name);return literal(aliases.get(name),seen);
+  }
+  if(ts.isUnionTypeNode(node)) {
+   if(!node.types.every((member:any)=>ts.isLiteralTypeNode(member)&&ts.isStringLiteral(member.literal)))return;
+   return node.types[0].literal.text;
+  }
+  if(ts.isLiteralTypeNode(node)&&ts.isStringLiteral(node.literal))return node.literal.text;
+ }
+ const values:Record<string,string>={};
+ for(const prop of props) {
+  if(!prop.required)continue;
+  const source=ts.createSourceFile('kuit-preview-prop.ts',`type PreviewProp = ${prop.type};`,ts.ScriptTarget.Latest,true,ts.ScriptKind.TS);
+  if(source.parseDiagnostics.length)continue;
+  const value=literal(source.statements[0].type);
+  if(value!==undefined)values[prop.name]=value;
+ }
+ return values;
+}

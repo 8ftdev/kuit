@@ -72,6 +72,29 @@ test('documents Vue withDefaults values',async()=>{
  const p=await run(root,'button.vue','vue');expect(await p.exited,await new Response(p.stderr).text()).toBe(0);
  const meta=JSON.parse(await readFile(join(root,'vue/button/kuit.json'),'utf8'));expect(meta.props.find((p:any)=>p.name==='label').default).toBe('"Hello"');
 });
+test('infers the first literal-union value for a required Vue preview prop',async()=>{
+ const root=await fixture({'canvas.vue':`<script setup lang="ts">type Variant = 'network' | 'directory' | 'control'; defineProps<{ variant: Variant }>();</script><template><canvas /></template>`});
+ const p=await run(root,'canvas.vue','vue','canvas');expect(await p.exited,await new Response(p.stderr).text()).toBe(0);
+ expect(JSON.parse(await readFile(join(root,'vue/canvas/preview-props.json'),'utf8'))).toEqual({variant:'network'});
+ const output=await new Response(p.stdout).text();expect(output).not.toContain('Required props detected');
+});
+test('explicit preview props override inferred literal-union values',async()=>{
+ const root=await fixture({'canvas.vue':`<script setup lang="ts">type Variant = 'network' | 'directory' | 'control'; defineProps<{ variant: Variant }>();</script><template><canvas /></template>`});
+ const p=await run(root,'canvas.vue','vue','canvas',['--props','{"variant":"control"}']);expect(await p.exited,await new Response(p.stderr).text()).toBe(0);
+ expect(JSON.parse(await readFile(join(root,'vue/canvas/preview-props.json'),'utf8'))).toEqual({variant:'control'});
+});
+test('unresolved required props fail before copying and show an override command',async()=>{
+ const root=await fixture({'canvas.vue':`<script setup lang="ts">type Variant = 'network' | 'directory'; defineProps<{ variant: Variant; label: string }>();</script><template><canvas /></template>`});
+ const p=await run(root,'canvas.vue','vue','canvas');expect(await p.exited).not.toBe(0);
+ const error=await new Response(p.stderr).text();expect(error).toContain('label');expect(error).toContain('--props');expect(error).toContain('kuit ');
+ expect(await Bun.file(join(root,'vue/canvas/kuit.json')).exists()).toBe(false);
+ expect(await Bun.file(join(root,'src/pages/components/vue/canvas/index.astro')).exists()).toBe(false);
+});
+test('explicit values satisfy required props that cannot be inferred',async()=>{
+ const root=await fixture({'canvas.vue':`<script setup lang="ts">type Variant = 'network' | 'directory'; defineProps<{ variant: Variant; label: string }>();</script><template><canvas /></template>`});
+ const p=await run(root,'canvas.vue','vue','canvas',['--props','{"label":"Example"}']);expect(await p.exited,await new Response(p.stderr).text()).toBe(0);
+ expect(JSON.parse(await readFile(join(root,'vue/canvas/preview-props.json'),'utf8'))).toEqual({variant:'network',label:'Example'});
+});
 test('selects the only runtime export while ignoring exported types',async()=>{
  const root=await fixture({'button.tsx':'export type Props={label?:string};export function Button(props:Props){return <button>{props.label}</button>}'});
  const p=await run(root,'button.tsx');expect(await p.exited,await new Response(p.stderr).text()).toBe(0);
@@ -83,7 +106,7 @@ test('rejects a requested default export when none exists',async()=>{
 });
 test('documents only the selected component, not unrelated helpers',async()=>{
  const root=await fixture({'button.tsx':'export default function Button(props:{label:string}){return null} function helper({label=42}:{label?:number;internal:boolean}){return label}'});
- const p=await run(root,'button.tsx');expect(await p.exited,await new Response(p.stderr).text()).toBe(0);const meta=JSON.parse(await readFile(join(root,'react/button/kuit.json'),'utf8'));expect(meta.props).toEqual([{name:'label',type:'string',required:true}]);
+ const p=await run(root,'button.tsx','react','button',['--props','{"label":"Example"}']);expect(await p.exited,await new Response(p.stderr).text()).toBe(0);const meta=JSON.parse(await readFile(join(root,'react/button/kuit.json'),'utf8'));expect(meta.props).toEqual([{name:'label',type:'string',required:true}]);
 });
 for(const [label,code,selected] of [
  ['default identifier','const Button=({label="Hello"}:Props)=>null;export default Button;','default'],

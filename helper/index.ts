@@ -3,7 +3,7 @@ import { existsSync } from 'node:fs';
 import { basename, dirname, extname, join, relative, resolve, sep } from 'node:path';
 import { createHash } from 'node:crypto';
 import { loadRuntime } from './runtime.ts';
-import { scan, documentProps, type Ref } from './scan.ts';
+import { scan, documentProps, inferPreviewProps, type Ref } from './scan.ts';
 import { validateManifest } from './manifest.ts';
 
 const flags=new Map<string,string>();
@@ -99,9 +99,16 @@ async function main() {
   if(exportName==='default'&&!hasDefault)throw new Error('Export default was not found.');
   if(!exportName){const candidates=[...named].filter(n=>/^[A-Z]/.test(n));if(hasDefault)exportName='default';else if(candidates.length===1)exportName=candidates[0];else throw new Error('Choose the component export with --export Name (or provide a default export).');}
  } else exportName='default';
- const previewProps=flags.has('--props')?JSON.parse(required('--props')):{};
- if(!previewProps||typeof previewProps!=='object'||Array.isArray(previewProps))throw new Error('--props must be a JSON object.');
+ const suppliedProps=flags.has('--props')?JSON.parse(required('--props')):{};
+ if(!suppliedProps||typeof suppliedProps!=='object'||Array.isArray(suppliedProps))throw new Error('--props must be a JSON object.');
  const meta={schemaVersion:1,name,framework,entry:files.get(origin)!.name,export:exportName,files:[...files.values()].map(f=>f.name),dependencies,props:documentProps(entryScripts,runtime.ts,exportName)};
+ const previewProps={...inferPreviewProps(entryScripts,runtime.ts,meta.props),...suppliedProps};
+ const missing=meta.props.filter(prop=>prop.required&&!Object.hasOwn(previewProps,prop.name));
+ if(missing.length) {
+  const quote=(value:string)=>`'${value.replaceAll("'",`'"'"'`)}'`;
+  const example=Object.fromEntries(missing.map(prop=>[prop.name,'<value>']));
+  throw new Error(`Couldn't generate default props for: ${missing.map(prop=>`${prop.name} (${prop.type})`).join(', ')}.\nAdd them manually with: kuit ${quote(origin)} ${framework} ${name} --props ${quote(JSON.stringify(example))}`);
+ }
  const nextPackage=structuredClone(targetPackage);nextPackage.dependencies??={};const warnings:string[]=[];
  for(const [pkg,version]of Object.entries(dependencies)) {const existing=nextPackage.dependencies[pkg]??nextPackage.devDependencies?.[pkg];if(existing&&existing!==version)warnings.push(`${pkg}: source requests ${version}; keeping viewer version ${existing}.`);else if(!existing)nextPackage.dependencies[pkg]=version;}
  const staging=await mkdtemp(join(target,'.kuit-'));const stagedBundle=join(staging,'bundle');const stagedPages=join(staging,'pages');
@@ -126,6 +133,5 @@ async function main() {
  console.log(`Imported ${framework}/${name}: ${files.size} files\nRoute: /components/${framework}/${name}\nFolder: ${destination}`);
  for(const warning of warnings)console.warn(`Note: ${warning}`);
  if(Object.keys(dependencies).length)console.log('Package dependencies recorded. Use --install or run bun install in the viewer.');
- if(meta.props.some(p=>p.required))console.log('Required props detected: edit preview-props.json or the generated preview.astro wrapper.');
 }
 main().catch(error=>{console.error(`kuit: ${error.message}`);process.exitCode=1;});

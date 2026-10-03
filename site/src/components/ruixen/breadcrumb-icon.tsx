@@ -108,6 +108,7 @@ export function BreadcrumbIcon({
 										itemRefs.current[index] = el;
 									}}
 									href={item.href}
+                  aria-label={item.label || (index === 0 ? "Home" : undefined)}
 									className={cn(
 										"inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm transition-colors duration-200",
 										isHovered

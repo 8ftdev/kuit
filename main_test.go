@@ -47,6 +47,13 @@ func TestExtractViewerIncludesWorkingProjectWithoutBuildOutput(t *testing.T) {
 		"src/pages/index.astro",
 		"src/components/react/ComponentTabs.tsx",
 		"src/pages/components/[framework].astro",
+		"src/pages/shaders/index.astro",
+		"src/pages/shaders/[name].astro",
+		"public/shaders/dither-canvas/preview.html",
+		"public/shaders/dither-canvas/dither.js",
+		"public/shaders/dither-canvas/dropdown.js",
+		"public/shaders/dither-canvas/preview.css",
+		"scripts/shader-styles.ts",
 	} {
 		if _, err := os.Stat(filepath.Join(target, name)); err != nil {
 			t.Errorf("missing viewer file %s: %v", name, err)

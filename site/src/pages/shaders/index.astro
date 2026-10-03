@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { shaders } from '../../lib/shaders';
+import { title } from '../../lib/catalog';
+---
+<Layout pageTitle="Shaders">
+  <div class="mb-7 flex items-center justify-between gap-3">
+    <h1 class="text-3xl font-semibold tracking-tight">Shaders</h1>
+    <span class="font-mono text-xs text-muted-foreground">({shaders.length})</span>
+  </div>
+  {shaders.length ? shaders.map(shader => (
+    <a href={`/shaders/${shader.name}/`} class="flex items-center gap-6 rounded-sm border-t border-border px-2 py-5 text-sm hover:bg-card focus-visible:bg-card">
+      <span class="flex flex-col gap-1"><span>{title(shader.name)}</span><span class="text-xs text-muted-foreground">{shader.description}</span></span>
+      <code class="ml-auto hidden shrink-0 font-mono text-xs text-muted-foreground sm:inline">HTML + JS</code>
+    </a>
+  )) : <EmptyState title="No shaders yet" description="Add an HTML and JavaScript shader folder with a shader.json manifest under public/shaders/." actionHref="/" actionLabel="Back home" />}
+</Layout>

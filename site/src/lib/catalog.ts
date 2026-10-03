@@ -1,4 +1,4 @@
-import { codeToTokens, type BundledLanguage } from 'shiki';
+import { highlightFile } from './source-files';
 
 export interface ComponentMeta {
  schemaVersion?:1; name:string; framework:string; entry:string; export:string; files:string[];
@@ -13,9 +13,6 @@ const sources=import.meta.glob('../../{react,vue,svelte,solid}/**/*.{ts,tsx,js,j
 export async function loadFiles(meta:ComponentMeta) {
  return Promise.all(meta.files.map(async name=>{
   const code=(sources[`../../${meta.framework}/${meta.name}/${name}`] as string|undefined)??null;
-  const ext=name.split('.').pop()!;const lang=({svg:'xml',mjs:'js',cjs:'js',mts:'ts',cts:'ts'} as Record<string,string>)[ext]??ext;
-  const syntax=(['tsx','ts','jsx','js','vue','svelte','css','scss','less','json','xml','md'].includes(lang)?lang:'text') as BundledLanguage;
-  const tokens=code===null?null:(await codeToTokens(code,{lang:syntax,theme:'github-dark'})).tokens.map(line=>line.map(t=>({content:t.content,color:t.color})));
-  return {name,code,tokens};
+  return highlightFile(name,code);
  }));
 }

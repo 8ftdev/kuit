@@ -3,10 +3,10 @@ import ExpandableMenuNavbar from './ExpandableMenuNavbar';
 import { useEffect } from 'react';
 export default function Navbar({sections}:{sections:{title?:string;items:{label:string;href:string;meta?:string}[]}[]}) {
  useEffect(() => {
-  const destinations:Record<string,string>={a:'/components/',s:'/snippets/',d:'/tools/'};
+  const destinations:Record<string,string>={a:'/components/',s:'/snippets/',d:'/tools/',f:'/shaders/'};
   const navigate=(event:KeyboardEvent)=>{
-   if(event.repeat||event.metaKey||event.ctrlKey||event.altKey||event.shiftKey)return;
-   if((event.target as HTMLElement).closest('input,textarea,select,[contenteditable="true"]'))return;
+   if(event.defaultPrevented||event.repeat||event.metaKey||event.ctrlKey||event.altKey||event.shiftKey)return;
+   if((event.target as HTMLElement).closest('input,textarea,select,[aria-haspopup="listbox"],[role="listbox"],[contenteditable="true"]'))return;
    const href=destinations[event.key.toLowerCase()];
    if(href){event.preventDefault();window.location.assign(href);}
   };

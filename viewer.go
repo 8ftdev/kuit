@@ -13,7 +13,7 @@ import (
 
 // Keep the editable viewer in site/ as the single source for new installations.
 //
-//go:embed site/astro.config.mjs site/bun.lock site/components.json site/package.json site/tsconfig.json site/plugins site/public site/src
+//go:embed site/astro.config.mjs site/bun.lock site/components.json site/package.json site/tsconfig.json site/plugins site/public site/src site/scripts
 var viewer embed.FS
 
 func viewerPath(path string) (string, error) {

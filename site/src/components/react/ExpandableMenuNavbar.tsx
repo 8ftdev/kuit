@@ -82,9 +82,10 @@ export default function ExpandableMenuNavbar({
 
   React.useEffect(() => {
     const handler = (e: KeyboardEvent) => {
+      if (e.defaultPrevented) return;
       if (e.key === "Escape" && open) { setOpen(false); toggleRef.current?.focus(); }
       const target = e.target as HTMLElement;
-      if (!e.metaKey && !e.ctrlKey && !e.altKey && e.key.toLowerCase() === shortcut.toLowerCase() && !target.closest('input,textarea,select,[contenteditable="true"]')) { e.preventDefault(); setOpen(v => !v); }
+      if (!e.metaKey && !e.ctrlKey && !e.altKey && e.key.toLowerCase() === shortcut.toLowerCase() && !target.closest('input,textarea,select,[aria-haspopup="listbox"],[role="listbox"],[contenteditable="true"]')) { e.preventDefault(); setOpen(v => !v); }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);

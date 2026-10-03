@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "shader:styles": "bun run scripts/shader-styles.ts",
     "dev": "bun --bun run astro dev --host 127.0.0.1",
     "build": "bun --bun run astro build",
     "preview": "bun --bun run astro preview --host 127.0.0.1"

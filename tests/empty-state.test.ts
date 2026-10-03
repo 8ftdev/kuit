@@ -29,6 +29,16 @@ test('a viewer with no imports shows useful empty states on every section', asyn
     const snippets = await readFile(join(root, 'dist/snippets/index.html'), 'utf8');
 
     expect(home).toContain('Soon');
+    expect(home).toContain('href="/shaders/"');
+    const shaders = await readFile(join(root, 'dist/shaders/index.html'), 'utf8');
+    expect(shaders).toContain('href="/shaders/dither-canvas/"');
+    const shader = await readFile(join(root, 'dist/shaders/dither-canvas/index.html'), 'utf8');
+    expect(shader).toContain('src="/shaders/dither-canvas/preview.html"');
+    expect(shader).not.toContain('component-tab-props');
+    expect(shader).toContain('dither.js');
+    const preview = await readFile(join(root, 'dist/shaders/dither-canvas/preview.html'), 'utf8');
+    expect(preview).toContain('src="./dither.js"');
+    expect(await Bun.file(join(root, 'dist/shaders/dither-canvas/dither.js')).exists()).toBe(true);
     expect(components).toContain('No components yet');
     expect(components).toContain('kuit ./src/button.tsx react');
     for (const [framework, label, extension] of [

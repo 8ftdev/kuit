@@ -6,3 +6,5 @@
 - Fumadocs, Astro, Shiki, Motion and other package licenses are included with their installed packages.
 
 - Icon breadcrumbs: [Ruixen UI registry](https://ruixen.com/r/baseui/breadcrumb-icon), installed through the shadcn CLI with Bun.
+
+- Button dropdown: [Ruixen UI](https://ruixen.com/docs/components/button-dropdown), installed from `https://ruixen.com/r/button-dropdown.json` with the shadcn CLI. Adapted to semantic Tailwind classes, selected-value semantics, keyboard navigation, and reduced motion. The standalone shader includes an HTML/JavaScript port in `dropdown.js`.

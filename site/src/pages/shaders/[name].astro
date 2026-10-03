@@ -1,0 +1,20 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ComponentTabs from '../../components/react/ComponentTabs';
+import { shaders, loadShaderFiles, type ShaderMeta } from '../../lib/shaders';
+import { title } from '../../lib/catalog';
+
+export function getStaticPaths() {
+  return shaders.map(shader => ({ params: { name: shader.name }, props: { shader } }));
+}
+interface Props { shader: ShaderMeta }
+const { shader } = Astro.props;
+const files = await loadShaderFiles(shader);
+---
+<Layout pageTitle={title(shader.name)}>
+  <div class="mb-7 flex flex-col gap-2">
+    <h1 class="text-3xl font-semibold tracking-tight">{title(shader.name)}</h1>
+    <p class="text-sm text-muted-foreground">{shader.description}</p>
+  </div>
+  <ComponentTabs meta={{ name: shader.name, entry: shader.entry, props: [] }} files={files} pathname={Astro.url.pathname} previewUrl={`/shaders/${shader.name}/${shader.entry}`} showProps={false} client:load />
+</Layout>

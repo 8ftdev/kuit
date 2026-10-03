@@ -48,6 +48,41 @@ viewers created by `kuit init` leave those samples out and show an import comman
 on empty component pages. Snippets and Web Tools remain clearly labeled
 placeholders.
 
+## Shaders
+
+The viewer includes `/shaders/` and a framework-free Dither Canvas demo with
+Network, Directory, and Control palettes. Press **F** from the viewer to open
+Shaders. Its Preview and Code tabs share the same bounded panels as components.
+
+Shader importing is not yet a CLI command. To add one manually, create
+`public/shaders/my-shader/` inside your viewer with an HTML entry, its local
+JavaScript/assets, and `shader.json`:
+
+```json
+{
+  "name": "my-shader",
+  "description": "A short description of the effect.",
+  "entry": "preview.html",
+  "files": ["preview.html", "shader.js"]
+}
+```
+
+The folder and `name` must match. Use a lowercase hyphenated name and relative
+asset URLs in the HTML/JavaScript. `files` lists the text files displayed in the
+Code tab (HTML, JavaScript, CSS, JSON, and GLSL are supported). The viewer discovers
+the manifest and adds `/shaders/my-shader/`; restart `kuit run` if a new folder is
+not picked up immediately. Shader entry pages run inside an iframe.
+
+The bundled Dither Canvas files live in `public/shaders/dither-canvas/`. Copy
+`preview.html`, `dither.js`, `dropdown.js`, and `preview.css` together to use it independently,
+without Vue, Astro, or a build step. It includes pause/play, reduced-motion
+support, automatic resizing, and a WebGL-unavailable message.
+
+Its HTML uses Tailwind utilities. After changing those classes or the viewer's
+theme, run `bun run shader:styles` from the viewer directory to regenerate the
+portable `preview.css`. This command processes shader folders containing a
+`preview.html` entry; other shaders can provide their own stylesheets.
+
 ## Import from any project
 
 Run inside a source project with a `package.json`:

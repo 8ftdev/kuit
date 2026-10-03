@@ -4,6 +4,8 @@ import Navbar from "../components/react/Navbar";
 import { BreadcrumbIcon } from "../components/ruixen/breadcrumb-icon";
 import { components, frameworkNames, title } from "../lib/catalog";
 
+import { shaders } from "../lib/shaders";
+
 const { pageTitle = "Kuit" } = Astro.props;
 const [section, framework, component] = Astro.url.pathname
 	.split("/")
@@ -21,6 +23,7 @@ const breadcrumbs = [
 		: []),
 	...(section === "tools" ? [{ label: "Web Tools" }] : []),
 	...(section === "snippets" ? [{ label: "Snippets" }] : []),
+	...(section === "shaders" ? [{ label: "Shaders", href: "/shaders/" }, ...(framework ? [{ label: title(framework) }] : [])] : []),
 ];
 const sections = [
 	{
@@ -32,6 +35,7 @@ const sections = [
 			},
 			{ label: "Snippets", href: "/snippets/", meta: "Soon" },
 			{ label: "Web Tools", href: "/tools/", meta: "Soon" },
+			{ label: "Shaders", href: "/shaders/", meta: `(${shaders.length})` },
 		],
 	},
 ];

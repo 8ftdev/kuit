@@ -1,0 +1,6 @@
+{
+  "name": "dither-canvas",
+  "description": "Animated Bayer dithering with three color palettes.",
+  "entry": "preview.html",
+  "files": ["preview.html", "dither.js", "dropdown.js", "preview.css"]
+}

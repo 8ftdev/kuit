@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" class="bg-card font-sans text-foreground scheme-dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dither Canvas</title>
+    <link rel="stylesheet" href="./preview.css">
+    <script src="./dropdown.js" defer></script>
+    <script src="./dither.js" defer></script>
+  </head>
+  <body class="m-0 flex h-dvh flex-col">
+    <div class="flex shrink-0 items-center gap-3 px-4 py-3 text-sm">
+      <span id="palette-label" class="w-12 shrink-0 text-xs text-muted-foreground">Palette</span>
+      <div data-dropdown class="relative min-w-0 w-40">
+        <button id="palette" type="button" value="network" aria-haspopup="listbox" aria-expanded="false" aria-controls="palette-options" aria-labelledby="palette-label palette-value" class="group box-border inline-flex h-9 w-full cursor-pointer items-center justify-between gap-3 rounded-lg border border-solid border-input bg-secondary px-3 font-sans text-sm text-foreground hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">
+          <span id="palette-value" data-dropdown-value>Network</span>
+          <svg data-dropdown-chevron class="size-3.5 shrink-0 text-muted-foreground motion-safe:transition-transform group-aria-expanded:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+        </button>
+        <div id="palette-options" role="listbox" aria-labelledby="palette-label" hidden class="absolute left-0 top-full z-20 box-border mt-2 max-h-60 w-full overflow-y-auto rounded-xl border border-solid border-border bg-card p-1 shadow-lg">
+          <button type="button" role="option" data-value="network" aria-selected="true" tabindex="-1" class="box-border flex min-h-9 w-full cursor-pointer items-center justify-between gap-4 rounded-lg border-0 bg-transparent px-3 py-2 text-left font-sans text-sm text-foreground hover:bg-accent focus-visible:bg-accent focus-visible:outline-none"><span>Network</span><svg data-check class="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10" /></svg></button>
+          <button type="button" role="option" data-value="directory" aria-selected="false" tabindex="-1" class="box-border flex min-h-9 w-full cursor-pointer items-center justify-between gap-4 rounded-lg border-0 bg-transparent px-3 py-2 text-left font-sans text-sm text-foreground hover:bg-accent focus-visible:bg-accent focus-visible:outline-none"><span>Directory</span><svg data-check class="size-3.5 shrink-0 invisible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10" /></svg></button>
+          <button type="button" role="option" data-value="control" aria-selected="false" tabindex="-1" class="box-border flex min-h-9 w-full cursor-pointer items-center justify-between gap-4 rounded-lg border-0 bg-transparent px-3 py-2 text-left font-sans text-sm text-foreground hover:bg-accent focus-visible:bg-accent focus-visible:outline-none"><span>Control</span><svg data-check class="size-3.5 shrink-0 invisible" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4 10-10" /></svg></button>
+        </div>
+      </div>
+      <button id="playback" type="button" class="box-border ml-auto inline-flex h-9 cursor-pointer items-center justify-center rounded-lg border border-solid border-input bg-secondary px-3 font-sans text-sm text-foreground hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring">Pause</button>
+    </div>
+    <main class="relative min-h-0 flex-1">
+      <canvas id="dither" class="absolute inset-0 block h-full w-full" aria-label="Animated dither pattern"></canvas>
+      <p id="status" role="status" hidden class="absolute inset-0 m-0 content-center p-8 text-center text-sm">WebGL is unavailable. Enable hardware acceleration or try another browser.</p>
+      <noscript><p class="p-8 text-center text-sm">Enable JavaScript to preview this shader.</p></noscript>
+    </main>
+  </body>
+</html>
